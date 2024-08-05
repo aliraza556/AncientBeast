@@ -9,6 +9,7 @@ export class Fullscreen {
 	}
 
 	toggle() {
+		const element = document.getElementById('AncientBeast');
 		if (isAppInNativeFullscreenMode()) {
 			this.button.classList.remove('fullscreenMode');
 			this.button
@@ -22,11 +23,16 @@ export class Fullscreen {
 			this.button
 				.querySelectorAll('.fullscreen__title')
 				.forEach((el) => (el.textContent = 'Contract'));
-			document.getElementById('AncientBeast').requestFullscreen();
+			if (element.requestFullscreen) {
+				element.requestFullscreen();
+			} else if ((element as any).webkitRequestFullscreen) { // Safari
+				(element as any).webkitRequestFullscreen();
+			} else if ((element as any).webkitEnterFullscreen) { // Chrome on iOS
+				(element as any).webkitEnterFullscreen();
+			}
 		}
 	}
 }
-
 /**
  * @returns {boolean} true if app is currently in [fullscreen mode using the native API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API), else false.
  */
